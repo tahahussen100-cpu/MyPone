@@ -1,0 +1,70 @@
+{
+  "Index": {
+    "title": "Welcome to My Phone",
+    "description": "The professional e-commerce platform for selling mobile phones, accessories, and repair services.",
+    "browse": "Browse Products"
+  },
+  "Navigation": {
+    "home": "Home",
+    "products": "Products",
+    "accessories": "Accessories",
+    "repair": "Repair Services",
+    "contact": "Contact Us",
+    "login": "Login",
+    "logout": "Logout",
+    "admin": "Admin Dashboard"
+  },
+  "Auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "createAccount": "Create Account"
+  },
+  "Admin": {
+    "control": "Admin Control",
+    "access": "Full System Access",
+    "dashboard": "Dashboard Overview",
+    "products": "Products & Categories",
+    "orders": "E-commerce Orders",
+    "repairs": "Repair Requests",
+    "users": "Manage Users",
+    "advanced": "Advanced Access",
+    "sql": "SQL Database Editor",
+    "storage": "Storage & Files Editor",
+    "ai": "AI Gemini Generator",
+    "overview": "Overview",
+    "stats": {
+      "sales": "Total Sales",
+      "pending": "Pending Orders",
+      "repairs": "Active Repairs",
+      "users": "Registered Users"
+    },
+    "recentOrders": "Recent Orders",
+    "noOrders": "No recent orders found.",
+    "alerts": "System Alerts",
+    "management": "Products Management",
+    "addProduct": "Add Product",
+    "editProduct": "Edit Product",
+    "createProduct": "Create New Product",
+    "save": "Save Product",
+    "saving": "Saving...",
+    "deleteConfirm": "Are you sure you want to delete this product?",
+    "form": {
+      "nameAr": "Arabic Name",
+      "nameEn": "English Name",
+      "brand": "Brand",
+      "price": "Price",
+      "descAr": "Arabic Description",
+      "descEn": "English Description"
+    },
+    "table": {
+      "name": "Product Name",
+      "brand": "Brand",
+      "price": "Price",
+      "actions": "Actions"
+    }
+  }
+}
