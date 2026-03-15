@@ -21,7 +21,6 @@ export default function ProductCard({ product }: { product: Product }) {
   const { currency, addToCart } = useAppStore();
   const name = locale === 'ar' ? product.name_ar : product.name_en;
   
-  // ... (price calculation)
   let displayPrice = product.price;
   if (currency === 'USD') displayPrice = product.price * 0.021;
   if (currency === 'SAR') displayPrice = product.price * 0.078;
@@ -39,7 +38,6 @@ export default function ProductCard({ product }: { product: Product }) {
       image: product.images[0] || '',
       quantity: 1,
     });
-    alert(locale === 'ar' ? 'تمت الإضافة للسلة' : 'Added to cart!');
   };
 
   return (
@@ -52,26 +50,16 @@ export default function ProductCard({ product }: { product: Product }) {
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-110"
           />
-          <div className="absolute top-3 right-3 bg-background/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-primary border border-primary/20">
-            {product.brand}
-          </div>
         </div>
-        
         <div className="flex flex-col flex-grow">
-          <h3 className="font-tajawal text-lg font-bold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+          <h3 className="font-tajawal text-lg font-bold text-foreground mb-2 line-clamp-2">
             {name}
           </h3>
-          
           <div className="mt-auto pt-4 flex items-center justify-between">
             <p className="font-cairo text-xl font-black text-primary">
               {displayPrice.toFixed(2)} {currencySymbols[currency]}
             </p>
-            <Button 
-              size="icon" 
-              variant="outline" 
-              className="rounded-full shadow-lg hover:bg-primary hover:text-white transition-all transform group-hover:scale-110" 
-              onClick={handleAddToCart}
-            >
+            <Button size="icon" variant="outline" className="rounded-full shadow-lg" onClick={handleAddToCart}>
               <ShoppingCart className="w-4 h-4" />
             </Button>
           </div>
