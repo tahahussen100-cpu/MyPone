@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Cairo, Tajawal } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import { ThemeProvider } from '@/components/theme-provider';
-import Header from '@/components/Header';
+import { ThemeProvider } from '@/components/theme-provider'; // تم التأكد من الاسم
+import Header from '@/components/Header'; // تم التأكد من الاسم
 import Footer from '@/components/Footer';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import '../globals.css';
