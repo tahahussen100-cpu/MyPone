@@ -44,19 +44,6 @@ export default async function Home() {
           </div>
         </section>
       )}
-      
-      <section className="bg-secondary rounded-xl p-8 text-center mt-16 shadow-inner">
-        <h3 className="text-2xl font-bold font-tajawal mb-4">
-          {t('title') === 'Welcome to My Phone' ? 'Shop by Brand' : 'تسوق حسب الماركة'}
-        </h3>
-        <div className="flex flex-wrap justify-center gap-4">
-          {['Apple', 'Samsung', 'Xiaomi', 'Oppo', 'Realme', 'Huawei', 'Other'].map(brand => (
-            <span key={brand} className="px-6 py-1 bg-background border rounded-full hover:border-primary cursor-pointer transition-colors shadow-sm">
-              {brand}
-            </span>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
