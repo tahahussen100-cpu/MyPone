@@ -51,7 +51,7 @@ export default async function Home() {
         </h3>
         <div className="flex flex-wrap justify-center gap-4">
           {['Apple', 'Samsung', 'Xiaomi', 'Oppo', 'Realme', 'Huawei', 'Other'].map(brand => (
-            <span key={brand} className="px-6 py-2 bg-background border border-border rounded-full hover:border-primary hover:text-primary transition-colors cursor-pointer font-cairo shadow-sm">
+            <span key={brand} className="px-6 py-1 bg-background border rounded-full hover:border-primary cursor-pointer transition-colors shadow-sm">
               {brand}
             </span>
           ))}
