@@ -1,7 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import SliderBanner from '@/components/SliderBanner';
 import ProductCard, { Product } from '@/components/ProductCard';
-
 import { createClient } from '@/lib/supabase/server';
 
 export default async function Home() {
@@ -46,7 +45,6 @@ export default async function Home() {
         </section>
       )}
       
-      {/* Categories Banner Placeholder */}
       <section className="bg-secondary rounded-xl p-8 text-center mt-16 shadow-inner">
         <h3 className="text-2xl font-bold font-tajawal mb-4">
           {t('title') === 'Welcome to My Phone' ? 'Shop by Brand' : 'تسوق حسب الماركة'}
