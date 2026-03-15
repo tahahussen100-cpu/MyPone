@@ -102,10 +102,10 @@ export default function Header() {
             onChange={(e) => setCurrency(e.target.value as any)}
             className="h-9 rounded-md border border-input bg-background px-2 py-1 text-sm shadow-sm font-cairo cursor-pointer"
           >
-            <option value="EGP">EGP ({currencySymbols.EGP})</option>
-            <option value="USD">USD ({currencySymbols.USD})</option>
-            <option value="SAR">SAR ({currencySymbols.SAR})</option>
-            <option value="EUR">EUR ({currencySymbols.EUR})</option>
+            <option value="EGP">EGP</option>
+            <option value="USD">USD</option>
+            <option value="SAR">SAR</option>
+            <option value="EUR">EUR</option>
           </select>
 
           <Button variant="ghost" size="icon" onClick={toggleLanguage} title="Switch Language">
@@ -126,17 +126,9 @@ export default function Header() {
                   variant="outline" 
                   size="sm" 
                   className="hidden lg:flex items-center gap-2 font-cairo bg-gradient-to-r from-amber-400 to-amber-600 hover:from-amber-500 hover:to-amber-700 text-white border-none shadow-lg shadow-amber-500/20 transition-all hover:scale-105 active:scale-95 px-4"
-                  title={locale === 'ar' ? 'تتبع الصيانة' : 'Track Repair'}
                 >
                   <Wrench className="h-4 w-4" />
                   <span className="whitespace-nowrap">{locale === 'ar' ? 'تتبع الصيانة' : 'Track Repair'}</span>
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  className="lg:hidden bg-gradient-to-r from-amber-400 to-amber-600 text-white border-none"
-                >
-                  <Wrench className="h-4 w-4" />
                 </Button>
               </Link>
 
@@ -145,17 +137,9 @@ export default function Header() {
                   variant="outline" 
                   size="sm" 
                   className="hidden lg:flex items-center gap-2 font-cairo bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white border-none shadow-lg shadow-purple-500/20 transition-all hover:scale-105 active:scale-95 px-4"
-                  title={locale === 'ar' ? 'تتبع الطلبات' : 'Track Orders'}
                 >
                   <Package className="h-4 w-4" />
                   <span className="whitespace-nowrap">{locale === 'ar' ? 'تتبع الطلبات' : 'Track Orders'}</span>
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  className="lg:hidden bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-none"
-                >
-                  <Package className="h-4 w-4" />
                 </Button>
               </Link>
             </div>
@@ -174,15 +158,7 @@ export default function Header() {
 
           {user ? (
             <div className="flex items-center gap-2">
-              <div className="hidden md:flex flex-col items-end mr-2">
-                <span className="text-xs font-bold font-tajawal text-foreground truncate max-w-[120px]">
-                  {user.email.split('@')[0]}
-                </span>
-                <span className="text-[10px] text-muted-foreground capitalize">
-                  {profile?.role || 'User'}
-                </span>
-              </div>
-              <Button variant="ghost" size="icon" onClick={handleLogout} title={t('logout')}>
+              <Button variant="ghost" size="icon" onClick={handleLogout}>
                 <LogOut className="h-5 w-5 text-destructive" />
               </Button>
             </div>
