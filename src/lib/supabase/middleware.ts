@@ -22,14 +22,13 @@ export async function updateSession(request: NextRequest, response: NextResponse
       }
         );
 
-  const { data } = await supabase.auth.getUser();
-    const user = data?.user;
-
-  // Basic admin protection logic
-  const pathname = request.nextUrl.pathname;
-    if (pathname.includes('/admin')) {
-          if (!user) {
-                  return NextResponse.redirect(new URL('/login', request.url));
+  /// Basic admin protection logic
+      const pathname = request.nextUrl.pathname;
+      if (pathname.includes('/admin')) {
+              const { data } = await supabase.auth.getUser();
+              const user = data?.user;
+          
+              if (!user) {return NextResponse.redirect(new URL('/login', request.url));
           }
           // Fetch user role
       const { data: profile } = await supabase
