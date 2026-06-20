@@ -25,36 +25,43 @@ export default function Header() {
 
   useEffect(() => {
     const fetchSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        const { data } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        setProfile(data);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user ?? null);
+      } catch (err) {
+        console.error("Error getting initial session:", err);
       }
     };
 
     fetchSession();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
-      if (session?.user) {
-        const { data } = await supabase
-          .from('users')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-        setProfile(data);
-      } else {
-        setProfile(null);
-      }
     });
 
     return () => subscription.unsubscribe();
   }, [supabase]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user) {
+        try {
+          const { data } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+          setProfile(data);
+        } catch (err) {
+          console.error("Error fetching user profile:", err);
+          setProfile(null);
+        }
+      } else {
+        setProfile(null);
+      }
+    };
+    fetchProfile();
+  }, [user, supabase]);
 
   const toggleLanguage = () => {
     const nextLocale = locale === 'ar' ? 'en' : 'ar';
