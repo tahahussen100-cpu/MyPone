@@ -133,8 +133,8 @@ export default function AdminRepairs() {
         </div>
       )}
 
-      <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden text-sm">
-        <table className="w-full">
+      <div className="bg-card border border-border rounded-xl shadow-sm overflow-x-auto text-sm">
+        <table className="w-full min-w-[800px]">
           <thead className="bg-secondary text-muted-foreground uppercase text-xs">
             <tr>
               <th className="px-6 py-4 font-bold text-right">رقم الجهاز</th>

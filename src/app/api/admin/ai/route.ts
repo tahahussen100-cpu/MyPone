@@ -22,7 +22,8 @@ export async function POST(request: Request) {
         },
       }
     );
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
     if (!user || user.email !== 'tahahussen100@gmail.com') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }

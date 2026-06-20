@@ -23,7 +23,8 @@ export async function POST(request: Request) {
 
     // Verify Admin Role securely using Service Role to bypass potential client manipulation, 
     // but first verify the JWT context mapping
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: userData } = await supabase.auth.getUser();
+    const user = userData?.user;
     if (!user || user.email !== 'tahahussen100@gmail.com') {
       return NextResponse.json({ error: 'Unauthorized. Advanced features limited to tahahussen100@gmail.com' }, { status: 403 });
     }

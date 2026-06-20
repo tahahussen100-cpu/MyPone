@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server';
-import { useLocale, useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Button } from '@/components/ui/button';

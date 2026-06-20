@@ -1,11 +1,12 @@
 "use client";
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { createClient } from '@/lib/supabase/client';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
+import Image from 'next/image';
 
 export default function AccessoriesPage() {
   const locale = useLocale();
@@ -57,9 +58,10 @@ export default function AccessoriesPage() {
           <div key={item.id} className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all">
             <div className="relative aspect-square bg-secondary/30 flex items-center justify-center p-8">
               {item.image ? (
-                <img 
+                <Image 
                   src={item.image} 
                   alt={locale === 'ar' ? item.name_ar : item.name_en}
+                  fill
                   className="max-h-full max-w-full object-contain"
                 />
               ) : (

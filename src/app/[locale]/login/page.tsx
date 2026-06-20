@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useRouter } from '@/navigation';
+import { useSearchParams } from 'next/navigation';
 
 export default function LoginPage() {
   const t = useTranslations('Auth');
@@ -16,12 +17,14 @@ export default function LoginPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
   const supabase = createClient();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextUrl = searchParams.get('next') || '/';
 
   const handleGoogleLogin = async () => {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextUrl)}`,
       },
     });
   };
@@ -31,19 +34,26 @@ export default function LoginPage() {
     setLoading(true);
     
     if (mode === 'signup') {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
+      // Use server API to create user with email auto-confirmed
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
+      const json = await res.json();
       
-      if (error) {
-        alert(error.message);
+      if (!res.ok) {
+        alert(json.error || 'حدث خطأ في إنشاء الحساب');
       } else {
-        alert('نجح إنشاء الحساب! يمكنك الآن تسجيل الدخول.');
-        setMode('login');
+        // Auto-login after signup
+        const { error: loginErr } = await supabase.auth.signInWithPassword({ email, password });
+        if (loginErr) {
+          alert('تم إنشاء الحساب بنجاح! يرجى تسجيل الدخول.');
+          setMode('login');
+        } else {
+          router.push(nextUrl);
+          router.refresh();
+        }
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
@@ -52,14 +62,31 @@ export default function LoginPage() {
       });
       
       if (error) {
-        alert(error.message);
+        // If email not confirmed, confirm it via API and retry
+        if (error.message.includes('Email not confirmed') || error.message.includes('not confirmed')) {
+          await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
+          const { error: retryErr } = await supabase.auth.signInWithPassword({ email, password });
+          if (retryErr) {
+            alert('خطأ في تسجيل الدخول: ' + retryErr.message);
+          } else {
+            router.push(nextUrl);
+            router.refresh();
+          }
+        } else {
+          alert('خطأ في تسجيل الدخول: ' + error.message);
+        }
       } else {
-        // Use window.location for a hard redirect to ensure middleware/header sync
-        window.location.href = '/';
+        router.push(nextUrl);
+        router.refresh();
       }
     }
     setLoading(false);
   };
+
 
   return (
     <div className="flex min-h-[calc(100vh-80px)] items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-background">
@@ -72,6 +99,7 @@ export default function LoginPage() {
         
         <div className="space-y-4">
           <Button 
+            type="button"
             onClick={handleGoogleLogin}
             variant="outline" 
             className="w-full flex items-center justify-center gap-2"

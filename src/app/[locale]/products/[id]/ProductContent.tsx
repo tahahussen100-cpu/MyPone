@@ -117,52 +117,27 @@ export default function ProductContent({ product, locale }: { product: any, loca
           </Button>
         </div>
 
-        {/* Pros and Cons Section */}
-        {((product.specs?.pros?.[locale]?.length > 0) || (product.specs?.cons?.[locale]?.length > 0)) && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
-            {/* Pros */}
-            {product.specs?.pros?.[locale]?.length > 0 && (
-              <div className="p-6 rounded-3xl bg-green-500/5 border border-green-500/10 space-y-4">
-                <div className="flex items-center gap-3 text-green-600 mb-2">
-                  <div className="p-2 rounded-xl bg-green-500/10">
-                    <ShieldCheck size={20} />
-                  </div>
-                  <h3 className="font-bold font-tajawal text-lg">
-                    {locale === 'ar' ? 'المميزات' : 'Pros'}
-                  </h3>
+        {/* Pros Section */}
+        {product.specs?.pros?.[locale]?.length > 0 && (
+          <div className="pt-6 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
+            <div className="p-6 rounded-3xl bg-green-500/5 border border-green-500/10 space-y-4">
+              <div className="flex items-center gap-3 text-green-600 mb-2">
+                <div className="p-2 rounded-xl bg-green-500/10">
+                  <ShieldCheck size={20} />
                 </div>
-                <ul className="space-y-3">
-                  {product.specs.pros[locale].map((pro: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-foreground/80 font-cairo">
-                      <div className="mt-1 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-green-500" />
-                      {pro}
-                    </li>
-                  ))}
-                </ul>
+                <h3 className="font-bold font-tajawal text-lg">
+                  {locale === 'ar' ? 'المميزات' : 'Pros'}
+                </h3>
               </div>
-            )}
-
-            {/* Cons */}
-            {product.specs?.cons?.[locale]?.length > 0 && (
-              <div className="p-6 rounded-3xl bg-red-500/5 border border-red-500/10 space-y-4">
-                <div className="flex items-center gap-3 text-red-600 mb-2">
-                  <div className="p-2 rounded-xl bg-red-500/10">
-                    <XCircle size={20} />
-                  </div>
-                  <h3 className="font-bold font-tajawal text-lg">
-                    {locale === 'ar' ? 'العيوب' : 'Cons'}
-                  </h3>
-                </div>
-                <ul className="space-y-3">
-                  {product.specs.cons[locale].map((con: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-foreground/80 font-cairo">
-                      <div className="mt-1 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-red-500" />
-                      {con}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {product.specs.pros[locale].map((pro: string, idx: number) => (
+                  <li key={idx} className="flex items-start gap-3 text-sm text-foreground/80 font-cairo">
+                    <div className="mt-1 flex-shrink-0 w-1.5 h-1.5 rounded-full bg-green-500" />
+                    {pro}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         )}
 

@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { createClient } from '@/lib/supabase/client';
-import { CheckCircle2, Clock, Wrench, ShieldCheck, Mail, Hash, Truck } from 'lucide-react';
+import { CheckCircle2, Clock, Wrench, ShieldCheck, Mail, Hash, Truck, Loader2 } from 'lucide-react';
 
 export default function RepairPage() {
   const locale = useLocale();
@@ -13,6 +13,8 @@ export default function RepairPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [user, setUser] = useState<any>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [lastOrderId, setLastOrderId] = useState<number | null>(null);
   
   const [formData, setFormData] = useState({
@@ -25,11 +27,15 @@ export default function RepairPage() {
   const [trackResult, setTrackResult] = useState<any>(null);
 
   useEffect(() => {
-    async function getEmail() {
+    async function getSessionData() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user?.email) setUserEmail(session.user.email);
+      if (session?.user) {
+        setUser(session.user);
+        setUserEmail(session.user.email || '');
+      }
+      setCheckingAuth(false);
     }
-    getEmail();
+    getSessionData();
   }, [supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,12 +45,22 @@ export default function RepairPage() {
     
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const user = session?.user;
+      const currentUser = session?.user;
+
+      if (!currentUser) {
+        setLoading(false);
+        alert(locale === 'ar' 
+          ? 'يجب تسجيل الدخول أولاً لإرسال طلب صيانة' 
+          : 'You must be logged in to submit a repair request'
+        );
+        window.location.href = `/login?next=/repair`;
+        return;
+      }
 
       const { data, error } = await supabase
         .from('repair_orders')
         .insert({
-          user_id: user?.id || null,
+          user_id: currentUser.id,
           name: formData.name,
           phone: formData.phone,
           device: formData.device,
@@ -183,33 +199,56 @@ export default function RepairPage() {
             {locale === 'ar' ? 'طلب صيانة جديد' : 'New Repair Request'}
           </h2>
           
-          <form onSubmit={handleSubmit} className="space-y-6 font-cairo shadow-none text-right">
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-foreground/80 pr-1">{locale === 'ar' ? 'الاسم بالكامل' : 'Full Name'}</label>
-              <Input required className="rounded-xl h-12 bg-secondary/30" placeholder={locale === 'ar' ? 'ادخل اسمك' : 'Enter your name'} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+          {checkingAuth ? (
+            <div className="flex flex-col items-center justify-center py-20 font-cairo">
+              <Loader2 className="h-10 w-10 animate-spin text-primary mb-4" />
+              <p className="text-muted-foreground text-sm">
+                {locale === 'ar' ? 'جاري التحقق من الحساب...' : 'Checking account...'}
+              </p>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-foreground/80 pr-1">{locale === 'ar' ? 'رقم الهاتف' : 'Phone Number'}</label>
-              <Input required type="tel" className="rounded-xl h-12 bg-secondary/30" placeholder="012XXXXXXXX" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+          ) : !user ? (
+            <div className="text-center py-12 space-y-6 font-cairo">
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                {locale === 'ar' 
+                  ? 'يرجى تسجيل الدخول أولاً لتتمكن من تقديم طلب صيانة وتتبع حالته.' 
+                  : 'Please log in first to be able to submit a repair request and track its status.'}
+              </p>
+              <Button 
+                onClick={() => window.location.href = `/login?next=/repair`} 
+                className="w-full h-14 rounded-2xl text-lg font-bold font-tajawal shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-transform"
+              >
+                {locale === 'ar' ? 'تسجيل الدخول الآن' : 'Log In Now'}
+              </Button>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-foreground/80 pr-1">{locale === 'ar' ? 'نوع الجهاز وموديله' : 'Device Model'}</label>
-              <Input required className="rounded-xl h-12 bg-secondary/30" placeholder="مثال: iPhone 13 Pro Max" value={formData.device} onChange={e => setFormData({...formData, device: e.target.value})} />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-foreground/80 pr-1">{locale === 'ar' ? 'وصف العطل' : 'Problem Description'}</label>
-              <textarea 
-                required
-                className="flex min-h-[120px] w-full rounded-2xl border border-input bg-secondary/30 px-4 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all outline-none"
-                placeholder={locale === 'ar' ? 'برجاء شرح المشكلة بالتفصيل...' : 'Please describe the issue...'}
-                value={formData.problem} 
-                onChange={e => setFormData({...formData, problem: e.target.value})} 
-              />
-            </div>
-            <Button type="submit" className="w-full h-14 rounded-2xl text-lg font-bold font-tajawal shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-transform" disabled={loading}>
-              {loading ? (locale === 'ar' ? 'جاري الإرسال...' : 'Submitting...') : (locale === 'ar' ? 'تأكيد إرسال الطلب' : 'Confirm Submission')}
-            </Button>
-          </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6 font-cairo shadow-none text-right">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-foreground/80 pr-1">{locale === 'ar' ? 'الاسم بالكامل' : 'Full Name'}</label>
+                <Input required className="rounded-xl h-12 bg-secondary/30" placeholder={locale === 'ar' ? 'ادخل اسمك' : 'Enter your name'} value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-foreground/80 pr-1">{locale === 'ar' ? 'رقم الهاتف' : 'Phone Number'}</label>
+                <Input required type="tel" className="rounded-xl h-12 bg-secondary/30" placeholder="012XXXXXXXX" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-foreground/80 pr-1">{locale === 'ar' ? 'نوع الجهاز وموديله' : 'Device Model'}</label>
+                <Input required className="rounded-xl h-12 bg-secondary/30" placeholder="مثال: iPhone 13 Pro Max" value={formData.device} onChange={e => setFormData({...formData, device: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-foreground/80 pr-1">{locale === 'ar' ? 'وصف العطل' : 'Problem Description'}</label>
+                <textarea 
+                  required
+                  className="flex min-h-[120px] w-full rounded-2xl border border-input bg-secondary/30 px-4 py-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 transition-all outline-none"
+                  placeholder={locale === 'ar' ? 'برجاء شرح المشكلة بالتفصيل...' : 'Please describe the issue...'}
+                  value={formData.problem} 
+                  onChange={e => setFormData({...formData, problem: e.target.value})} 
+                />
+              </div>
+              <Button type="submit" className="w-full h-14 rounded-2xl text-lg font-bold font-tajawal shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-transform" disabled={loading}>
+                {loading ? (locale === 'ar' ? 'جاري الإرسال...' : 'Submitting...') : (locale === 'ar' ? 'تأكيد إرسال الطلب' : 'Confirm Submission')}
+              </Button>
+            </form>
+          )}
         </div>
 
         {/* Tracking Section */}

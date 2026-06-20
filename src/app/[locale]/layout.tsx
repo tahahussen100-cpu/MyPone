@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { Cairo, Tajawal } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
-import { ThemeProvider } from '@/components/theme-provider'; // تم التأكد من الاسم
-import Header from '@/components/Header'; // تم التأكد من الاسم
+import { ThemeProvider } from '@/components/theme-provider';
+import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FloatingWhatsApp from '@/components/FloatingWhatsApp';
 import '../globals.css';
@@ -36,8 +36,8 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning>
-      <body className={`${cairo.variable} ${tajawal.variable} font-cairo antialiased min-h-screen bg-background text-foreground flex flex-col`}>
+    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'} suppressHydrationWarning className="overflow-x-hidden">
+      <body className={`${cairo.variable} ${tajawal.variable} font-cairo antialiased min-h-screen bg-background text-foreground flex flex-col overflow-x-hidden max-w-full`}>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"

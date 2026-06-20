@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, Edit, Trash2, UploadCloud, Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 export default function AdminProducts() {
   const t = useTranslations('Admin');
@@ -111,7 +112,7 @@ export default function AdminProducts() {
             {/* Image Preview / Upload Area */}
             <div className="relative min-h-[160px] aspect-video bg-secondary/50 rounded-lg border-2 border-dashed border-primary/30 flex flex-col items-center justify-center overflow-hidden transition-all hover:bg-secondary/80">
               {formData.images[0] ? (
-                <img src={formData.images[0]} alt="Preview" className="w-full h-full object-contain" />
+                <Image src={formData.images[0]} alt="Preview" fill className="object-contain" />
               ) : (
                 <div className="flex flex-col items-center text-muted-foreground p-4">
                   <UploadCloud size={48} className="text-blue-500 mb-2 animate-pulse" />
@@ -147,8 +148,8 @@ export default function AdminProducts() {
 
         {/* Product List */}
         <div className="xl:col-span-2">
-          <div className="bg-card border border-border rounded-xl shadow-sm overflow-hidden">
-            <table className="w-full text-right text-sm">
+          <div className="bg-card border border-border rounded-xl shadow-sm overflow-x-auto">
+            <table className="w-full text-right text-sm min-w-[600px]">
               <thead className="bg-secondary text-muted-foreground uppercase text-xs">
                 <tr>
                   <th className="px-6 py-4 font-bold">{t('table.name')}</th>
@@ -168,7 +169,9 @@ export default function AdminProducts() {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           {product.images?.[0] && (
-                            <img src={product.images[0]} alt="" className="w-12 h-12 rounded-lg object-cover bg-secondary" />
+                            <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-secondary">
+                              <Image src={product.images[0]} alt="" fill className="object-cover" />
+                            </div>
                           )}
                           <div>
                             <div className="font-bold">{product.name_ar}</div>

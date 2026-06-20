@@ -1,16 +1,16 @@
 "use client";
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { createClient } from '@/lib/supabase/client';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useAppStore } from '@/lib/store';
+import Image from 'next/image';
 
 export default function ProductsPage() {
   const locale = useLocale();
-  const t = useTranslations('Common'); // Fallback to Home translations or generic
   const supabase = createClient();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,10 +58,11 @@ export default function ProductsPage() {
           <div key={product.id} className="group bg-card rounded-2xl border border-border overflow-hidden hover:shadow-2xl transition-all duration-300">
             <div className="relative aspect-square overflow-hidden bg-secondary/30 text-center flex items-center justify-center">
               {product.images?.[0] ? (
-                <img 
+                <Image 
                   src={product.images[0]} 
                   alt={locale === 'ar' ? product.name_ar : product.name_en}
-                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                  fill
+                  className="object-contain group-hover:scale-110 transition-transform duration-500"
                 />
               ) : (
                 <div className="text-muted-foreground">No Image</div>

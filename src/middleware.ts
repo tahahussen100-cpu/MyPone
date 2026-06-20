@@ -18,5 +18,6 @@ export async function middleware(request: NextRequest) {
 }
  
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
+  // Exclude api, auth, _next, _vercel, and all files with an extension (e.g. favicon.ico)
+  matcher: ['/((?!api|auth|_next|_vercel|.*\\..*).*)']
 };

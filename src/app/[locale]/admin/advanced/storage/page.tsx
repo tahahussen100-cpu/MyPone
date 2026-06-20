@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
-import { Upload, Trash2, Folder, File as FileIcon } from 'lucide-react';
+import { Upload, Trash2, Folder, File as FileIcon, Image as ImageIcon } from 'lucide-react';
 
 export default function StorageManagerPage() {
   const supabase = createClient();
