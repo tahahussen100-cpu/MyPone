@@ -28,12 +28,17 @@ export default function RepairPage() {
 
   useEffect(() => {
     async function getSessionData() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUser(session.user);
-        setUserEmail(session.user.email || '');
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          setUser(session.user);
+          setUserEmail(session.user.email || '');
+        }
+      } catch (err) {
+        console.error('Error getting session:', err);
+      } finally {
+        setCheckingAuth(false);
       }
-      setCheckingAuth(false);
     }
     getSessionData();
   }, [supabase]);

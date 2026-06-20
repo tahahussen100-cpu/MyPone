@@ -16,18 +16,24 @@ export default function ProfilePage() {
 
   useEffect(() => {
     const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      const user = data?.user;
-      if (!user) {
+      try {
+        const { data } = await supabase.auth.getUser();
+        const user = data?.user;
+        if (!user) {
+          router.push('/login');
+        } else {
+          const { data: profile } = await supabase.from('users').select('*').eq('id', user.id).single();
+          setUser({ ...user, profile });
+        }
+      } catch (err) {
+        console.error('Error fetching user profile:', err);
         router.push('/login');
-      } else {
-        const { data: profile } = await supabase.from('users').select('*').eq('id', user.id).single();
-        setUser({ ...user, profile });
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     getUser();
-  }, [router, supabase.auth, supabase]);
+  }, [router, supabase]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
