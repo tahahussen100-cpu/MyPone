@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Wrench, Clock, CheckCircle, XCircle, MessageSquare, Send, X, Loader2 } from 'lucide-react';
+import { Wrench, Clock, CheckCircle, XCircle, MessageSquare, Send, X, Loader2, Search } from 'lucide-react';
 
 export default function AdminRepairs() {
   const t = useTranslations('Admin');
@@ -14,6 +14,7 @@ export default function AdminRepairs() {
   const [repairs, setRepairs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Chat State
   const [selectedRepair, setSelectedRepair] = useState<any>(null);
@@ -116,13 +117,36 @@ export default function AdminRepairs() {
     }
   };
 
+  const filteredRepairs = repairs.filter(repair => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return true;
+    return (
+      (repair.phone && repair.phone.includes(query)) ||
+      (repair.name && repair.name.toLowerCase().includes(query)) ||
+      (repair.device && repair.device.toLowerCase().includes(query)) ||
+      (repair.auto_order_id && repair.auto_order_id.toString().includes(query))
+    );
+  });
+
   return (
     <div className="font-cairo text-right min-h-screen relative" dir="rtl">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8">
         <h1 className="text-3xl font-bold font-tajawal text-primary">{t('repairs')}</h1>
-        <Button onClick={fetchRepairs} variant="outline" size="sm">
-          تحديث البيانات
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          {/* حقل البحث المتطور برقم الموبايل أو الاسم */}
+          <div className="relative flex items-center min-w-[280px]">
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <Input
+              placeholder="البحث برقم الهاتف أو الاسم أو الجهاز..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pr-9 pl-3 rounded-xl border-border bg-card font-tajawal text-xs w-full"
+            />
+          </div>
+          <Button onClick={fetchRepairs} variant="outline" size="sm" className="rounded-xl font-tajawal shrink-0">
+            تحديث البيانات
+          </Button>
+        </div>
       </div>
 
       {fetchError && (
@@ -147,11 +171,15 @@ export default function AdminRepairs() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={6} className="p-12 text-center text-muted-foreground">جاري التحميل...</td></tr>
-            ) : repairs.length === 0 ? (
-              <tr><td colSpan={6} className="p-12 text-center text-muted-foreground opacity-50">لا يوجد طلبات صيانة حالياً.</td></tr>
+              <tr><td colSpan={6} className="p-12 text-center text-muted-foreground font-tajawal">جاري التحميل...</td></tr>
+            ) : filteredRepairs.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="p-12 text-center text-muted-foreground opacity-50 font-tajawal">
+                  {searchQuery ? "لم يتم العثور على أي نتائج تطابق بحثك." : "لا يوجد طلبات صيانة حالياً."}
+                </td>
+              </tr>
             ) : (
-              repairs.map(repair => (
+              filteredRepairs.map(repair => (
                 <tr key={repair.id} className="border-t border-border hover:bg-secondary/50 transition-colors">
                   <td className="px-6 py-4 font-mono text-xs">#{repair.auto_order_id}</td>
                   <td className="px-6 py-4">
