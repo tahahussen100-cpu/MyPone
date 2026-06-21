@@ -2,7 +2,23 @@
   "Index": {
     "title": "مرحباً بكم في My Phone",
     "description": "المتجر الاحترافي المتكامل لبيع الهواتف المحمولة والإكسسوارات وخدمات الصيانة.",
-    "browse": "تصفح المنتجات"
+    "browse": "تصفح المنتجات",
+    "trackTitle": "تابع حالة جهازك",
+    "trackSubtitle": "أدخل رقم الهاتف للبحث عن طلب الصيانة الخاص بك ومتابعة حالته مباشرة.",
+    "phoneLabel": "رقم الموبايل",
+    "phonePlaceholder": "مثال: 0101234567 أو آخر 4 أرقام 4567",
+    "searchBtn": "ابحث الآن",
+    "searchBtnSearching": "جاري البحث...",
+    "successCardTitle": "تفاصيل حالة الطلب",
+    "deviceLabel": "نوع الجهاز",
+    "phoneLabelShort": "رقم الهاتف المرتبط",
+    "statusLabel": "حالة الطلب",
+    "statusReceived": "تم الاستلام",
+    "statusInspecting": "جاري الفحص",
+    "statusRepairing": "قيد الصيانة",
+    "statusReady": "جاهز للاستلام / في الطريق إليك",
+    "notFoundError": "لم نتمكن من العثور على طلب بهذا الرقم. يرجى التأكد من الرقم أو التواصل مع خدمة العملاء.",
+    "validationError": "يرجى إدخال أرقام فقط."
   },
   "Navigation": {
     "home": "الرئيسية",

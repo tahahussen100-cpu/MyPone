@@ -2,7 +2,23 @@
   "Index": {
     "title": "Welcome to My Phone",
     "description": "The professional e-commerce platform for selling mobile phones, accessories, and repair services.",
-    "browse": "Browse Products"
+    "browse": "Browse Products",
+    "trackTitle": "Track Your Order",
+    "trackSubtitle": "Enter your phone number to search for your repair order and follow its status directly.",
+    "phoneLabel": "Mobile Number",
+    "phonePlaceholder": "Example: 0101234567 or last 4 digits 4567",
+    "searchBtn": "Search Now",
+    "searchBtnSearching": "Searching...",
+    "successCardTitle": "Order Status Details",
+    "deviceLabel": "Device Model",
+    "phoneLabelShort": "Associated Phone",
+    "statusLabel": "Order Status",
+    "statusReceived": "Received",
+    "statusInspecting": "Under Inspection",
+    "statusRepairing": "Under Repair",
+    "statusReady": "Ready for Pickup / On the way to you",
+    "notFoundError": "We couldn't find an order with this number. Please check the number or contact customer service.",
+    "validationError": "Please enter digits only."
   },
   "Navigation": {
     "home": "Home",

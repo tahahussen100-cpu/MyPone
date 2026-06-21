@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import SliderBanner from '@/components/SliderBanner';
 import ProductCard, { Product } from '@/components/ProductCard';
+import TrackOrder from '@/components/TrackOrder';
 
 import { createClient } from '@/lib/supabase/server';
 
@@ -31,6 +32,11 @@ export default async function Home() {
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
+      </section>
+
+      {/* Track Device Section */}
+      <section className="mb-16 border-t border-border pt-12">
+        <TrackOrder />
       </section>
 
       {moreProducts && moreProducts.length > 0 && (
